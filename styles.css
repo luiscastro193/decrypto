@@ -1,0 +1,14 @@
+* {
+	font-family: 'Lexend', sans-serif;
+}
+
+ol {
+	padding: 0px;
+	list-style-position: inside;
+}
+
+section {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5em;
+}
