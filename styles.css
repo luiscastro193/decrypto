@@ -10,5 +10,5 @@ ol {
 section {
 	display: flex;
 	flex-wrap: wrap;
-	gap: .5em;
+	gap: 1em;
 }
