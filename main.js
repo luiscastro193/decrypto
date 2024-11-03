@@ -37,7 +37,10 @@ async function getWords() {
 		else
 			words = request(endpoint).then(response => response.json());
 		
-		words.then(myWords => wordsElement.append(...myWords.map(toItem)));
+		words.then(myWords => {
+			wordsElement.innerHTML = '';
+			wordsElement.append(...myWords.map(toItem));
+		});
 		
 		words.catch(error => {
 			console.error(error);
