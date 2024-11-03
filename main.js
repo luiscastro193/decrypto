@@ -88,12 +88,15 @@ wordsButton.onclick = async () => {
 };
 
 shareButton.onclick = async () => {
+	shareButton.disabled = true;
 	let url = new URL('#' + await (await zipPromise).zip((await getWords()).join('\n')), location.href);
 	
 	if (navigator.share)
 		navigator.share({url});
 	else
 		navigator.clipboard.writeText(url).then(() => alert("Enlace copiado al portapapeles"));
+	
+	shareButton.disabled = false;
 };
 
 window.onhashchange = () => location.reload();
