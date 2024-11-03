@@ -1,6 +1,6 @@
 "use strict";
 const zipPromise = import("https://luiscastro193.github.io/zip-string/zip-string.js");
-const endpoint = "https://luiscastro193.duckdns.org/scraper/words";
+const endpoint = "https://luiscastro193.com/scraper/words";
 const codeElement = document.querySelector('p');
 const wordsElement = document.querySelector('ol');
 const [codeButton, wordsButton, shareButton] = document.querySelectorAll('button');
