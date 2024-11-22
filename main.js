@@ -31,7 +31,8 @@ let areVisible = false;
 async function getWords() {
 	if (!words) {
 		if (location.hash) {
-			words = (await zipPromise).unzip(location.hash.slice(1)).then(myWords => myWords.split('\n'));
+			let compressed = location.hash.slice(1);
+			words = (await zipPromise).unzip(compressed).then(myWords => myWords.split('\n'));
 			history.pushState(null, '', ' ');
 		}
 		else
