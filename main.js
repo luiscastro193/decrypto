@@ -104,7 +104,7 @@ shareButton.onclick = async () => {
 };
 
 qrButton.onclick = async () => {
-	let url = "https://luiscastro193.github.io/qr-generator/#" + await (await zipPromise).zip(await shareURL());
+	let url = "https://luiscastro193.github.io/qr-generator/#" + encodeURIComponent(await shareURL());
 	window.open(url);
 };
 
