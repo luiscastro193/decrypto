@@ -25,8 +25,13 @@ function toItem(string) {
 	return li;
 }
 
+async function shareURL(myWords) {
+	return new URL('#' + await (await zipPromise).zip(myWords.join('\n')), location.href);
+}
+
 let words;
 let areVisible = false;
+let url;
 
 async function getWords() {
 	if (!words) {
@@ -38,9 +43,10 @@ async function getWords() {
 		else
 			words = request(endpoint).then(response => response.json());
 		
-		words.then(myWords => {
+		words.then(async myWords => {
 			wordsElement.innerHTML = '';
 			wordsElement.append(...myWords.map(toItem));
+			url = await shareURL(myWords);
 			shareButton.disabled = false;
 			qrButton.disabled = false;
 		});
@@ -90,22 +96,15 @@ wordsButton.onclick = async () => {
 	if (isValid) printCode();
 };
 
-async function shareURL() {
-	return new URL('#' + await (await zipPromise).zip((await getWords()).join('\n')), location.href);
-}
-
 shareButton.onclick = async () => {
-	let url = await shareURL();
-	
 	if (navigator.share)
 		navigator.share({url});
 	else
 		navigator.clipboard.writeText(url).then(() => alert("Enlace copiado al portapapeles"));
 };
 
-qrButton.onclick = async () => {
-	let url = "https://luiscastro193.github.io/qr-generator/#" + encodeURIComponent(await shareURL());
-	window.open(url);
+qrButton.onclick = () => {
+	window.open("https://luiscastro193.github.io/qr-generator/#" + encodeURIComponent(url));
 };
 
 window.onhashchange = () => location.reload();
