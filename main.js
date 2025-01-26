@@ -80,7 +80,7 @@ async function printCode() {
 	codeElement.textContent = text;
 }
 
-codeButton.onclick = async () => {
+codeButton.onclick = () => {
 	let lastCode = JSON.stringify(code);
 	code = shuffle(code);
 	isRepeated = !isRepeated && JSON.stringify(code) == lastCode;
@@ -88,7 +88,7 @@ codeButton.onclick = async () => {
 	printCode();
 };
 
-wordsButton.onclick = async () => {
+wordsButton.onclick = () => {
 	getWords();
 	wordsElement.hidden = areVisible;
 	wordsButton.textContent = areVisible ? "Mostrar palabras" : "Ocultar palabras";
@@ -96,7 +96,7 @@ wordsButton.onclick = async () => {
 	if (isValid) printCode();
 };
 
-shareButton.onclick = async () => {
+shareButton.onclick = () => {
 	if (navigator.share)
 		navigator.share({url});
 	else
