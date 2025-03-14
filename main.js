@@ -3,7 +3,7 @@ const zipPromise = import("https://luiscastro193.github.io/zip-string/zip-string
 const endpoint = "https://luiscastro193.com/scraper/words";
 const codeElement = document.querySelector('p');
 const wordsElement = document.querySelector('ol');
-const [codeButton, wordsButton, shareButton, qrButton] = document.querySelectorAll('button');
+const [codeButton, wordsButton, shareButton, qrButton, resetButton] = document.querySelectorAll('button');
 
 async function request(resource, options) {
 	let response = await fetch(resource, options);
@@ -25,36 +25,29 @@ function toItem(string) {
 	return li;
 }
 
-async function shareURL(myWords) {
-	return new URL('#' + await (await zipPromise).zip(myWords.join('\n')), location.href);
-}
-
 let words;
 let areVisible = false;
-let url;
 
 async function getWords() {
 	if (!words) {
-		if (location.hash) {
-			let compressed = location.hash.slice(1);
-			words = (await zipPromise).unzip(compressed).then(myWords => myWords.split('\n'));
-			history.pushState(null, '', ' ');
-		}
+		if (location.hash)
+			words = (await zipPromise).unzip(location.hash.slice(1)).then(myWords => myWords.split('\n'));
 		else
 			words = request(endpoint).then(response => response.json());
 		
 		words.then(async myWords => {
 			wordsElement.innerHTML = '';
 			wordsElement.append(...myWords.map(toItem));
-			url = await shareURL(myWords);
+			if (!location.hash) history.pushState(null, '', '#' + await (await zipPromise).zip(myWords.join('\n')));
 			shareButton.disabled = false;
 			qrButton.disabled = false;
+			resetButton.disabled = false;
 		});
 		
 		words.catch(error => {
 			console.error(error);
 			alert("Error, vuelva a intentarlo");
-			location.reload();
+			location.href = ' ';
 		});
 	}
 	
@@ -98,14 +91,16 @@ wordsButton.onclick = () => {
 
 shareButton.onclick = () => {
 	if (navigator.share)
-		navigator.share({url});
+		navigator.share({url: location.href});
 	else
-		navigator.clipboard.writeText(url).then(() => alert("Enlace copiado al portapapeles"));
+		navigator.clipboard.writeText(location.href).then(() => alert("Enlace copiado al portapapeles"));
 };
 
 qrButton.onclick = () => {
-	window.open("https://luiscastro193.github.io/qr-generator/#" + encodeURIComponent(url));
+	window.open("https://luiscastro193.github.io/qr-generator/#" + encodeURIComponent(location.href));
 };
 
 window.onhashchange = () => location.reload();
+resetButton.onclick = () => {location.href = ' '};
 [codeButton, wordsButton].forEach(button => {button.disabled = false});
+[shareButton, qrButton, resetButton].forEach(button => {button.disabled = true});
