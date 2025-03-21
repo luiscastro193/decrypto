@@ -39,8 +39,6 @@ async function getWords() {
 			wordsElement.innerHTML = '';
 			wordsElement.append(...myWords.map(toItem));
 			if (!location.hash) history.pushState(null, '', '#' + await (await zipPromise).zip(myWords.join('\n')));
-			shareButton.disabled = false;
-			qrButton.disabled = false;
 			resetButton.disabled = false;
 		});
 		
@@ -102,5 +100,4 @@ qrButton.onclick = () => {
 
 window.onhashchange = () => location.reload();
 resetButton.onclick = () => {location.href = ' '};
-[codeButton, wordsButton].forEach(button => {button.disabled = false});
-[shareButton, qrButton, resetButton].forEach(button => {button.disabled = true});
+[codeButton, wordsButton, shareButton, qrButton].forEach(button => {button.disabled = false});
