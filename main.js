@@ -4,6 +4,7 @@ const endpoint = "https://luiscastro193.com/scraper/words";
 const codeElement = document.querySelector('p');
 const wordsElement = document.querySelector('ol');
 const [codeButton, wordsButton, shareButton, qrButton, resetButton] = document.querySelectorAll('button');
+const shareText = "Compartir palabras";
 
 async function request(resource, options) {
 	let response = await fetch(resource, options);
@@ -40,6 +41,7 @@ async function getWords() {
 			wordsElement.append(...myWords.map(toItem));
 			if (!location.hash) history.pushState(null, '', '#' + await (await zipPromise).zip(myWords.join('\n')));
 			resetButton.disabled = false;
+			shareButton.textContent = shareText;
 		});
 		
 		words.catch(error => {
@@ -101,3 +103,8 @@ qrButton.onclick = () => {
 window.onhashchange = () => location.reload();
 resetButton.onclick = () => {location.href = ' '};
 [codeButton, wordsButton, shareButton, qrButton].forEach(button => {button.disabled = false});
+
+if (location.hash) {
+	shareButton.textContent = shareText;
+	resetButton.disabled = false;
+}
